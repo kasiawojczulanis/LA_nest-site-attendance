@@ -1,4 +1,4 @@
-# William
+# The eye that guards the rock: does it shape the world? Nest site attendance patterns in a colonially breeding pelagic seabird
 
 This repository is associated with the manuscript titled: "The eye that guards the rock: does it shape the world? Nest site attendance patterns in a pelagic seabird, the little auk"
 It is now submitted to a scientific journal: Behavioural Ecology and Sociobiology, being considered for publication.
