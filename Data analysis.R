@@ -3,6 +3,7 @@ rm(list = ls())
 # Libs
 library(tidyverse)
 library(readr)
+library(readxl)
 
 library(officer)
 library(flextable)
@@ -22,7 +23,12 @@ library(emmeans)
 # Male and female breeders - nest site attendance during the entire breeding season (GAMM)
 
 # Load data
-DA_breeders <- readRDS("./DA_patterns of breeders.rds")
+# DA_breeders <- readRDS("./DA_patterns of breeders.rds")
+
+DA_breeders <- read_excel("./DA_patterns of breeders.xlsx")
+DA_breeders[1:4] <- lapply(DA_breeders[1:4], as.factor) # necessary format conversion
+
+
 
 # GAMM fit ----
 # (with cor matrix - corAR1) 
@@ -211,7 +217,8 @@ print(doc, target = "Table_S1.docx")
 # Breeders vs failed  -----
 
 # Comparison of breeders and failed breeders (regarding sex and chick rearing stage)
-df <- readRDS("./DA_Q2_breeders_non_breeders_24.rds") # 24 hours (main text)
+# df <- readRDS("./DA_breeders_non_breeders_24.rds") # 24 hours
+df <- read_excel("./DA_breeders_non_breeders_24.xlsx") # 24 hours
 
 # REML fit ----
 # model <- lmer(on_screen_min24 ~ status + sx + session + (1 | nest/ringNo), data = df)
@@ -273,3 +280,14 @@ comp_plot <- ggplot(emm_df, aes(x = session, y = emmean, color = sx, shape = sta
   theme_minimal()
 
 # ggsave("Fig_Q2_24.jpg", comp_plot, dpi = 300)
+
+
+# Failed breeders presence ----
+
+# df <- readRDS("./DA_breeders_non_breeders_46.rds") # 46 hours (to check presence)
+df <- read_excel("./DA_breeders_non_breeders_46.xlsx") # 46 hours (to check presence)
+
+df %>% 
+  group_by(session, status, sx, ringno) %>% summarise(n = n()) %>% 
+  group_by(session, status, sx) %>% summarise(n = n()) %>% 
+  filter(status == "failed breeder")
