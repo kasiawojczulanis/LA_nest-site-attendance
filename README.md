@@ -1,9 +1,3 @@
----
-editor_options: 
-  markdown: 
-    wrap: 72
----
-
 # The eye that guards the rock: does it shape the world? Nest site attendance patterns in a colonially breeding pelagic seabird
 
 This repository is associated with the manuscript titled: "The eye that
