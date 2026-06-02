@@ -314,27 +314,28 @@ emm_draws <- emm_draws %>%
   left_join(sample_size_emm_df,
             by = c("status", "sx", "session"))
 
-# Pairwise contrasts
-pairwise_results <- as.data.frame(pairs(emm, adjust = "tukey"))
-
-# export table
-ft <- flextable(pairwise_results)
-ft <- font(ft, fontname = "Times New Roman", part = "all")
-ft <- fontsize(ft, size = 12, part = "all")
-ft <- autofit(ft)
-
-doc <- read_docx()
-doc <- body_add_flextable(doc, value = ft)
-doc <- body_end_section_landscape(doc)
-print(doc, target = "Table_S2.docx")
-
-
+# # Pairwise contrasts
+# pairwise_results <- as.data.frame(pairs(emm, adjust = "tukey"))
+# 
+# # export table
+# ft <- flextable(pairwise_results)
+# ft <- font(ft, fontname = "Times New Roman", part = "all")
+# ft <- fontsize(ft, size = 12, part = "all")
+# ft <- autofit(ft)
+# 
+# doc <- read_docx()
+# doc <- body_add_flextable(doc, value = ft)
+# doc <- body_end_section_landscape(doc)
+# print(doc, target = "Table_S2.docx")
+# 
+# 
 # Plotting - posterior means
 
 label_df <- sample_size_emm_df %>%
   mutate(
     x_pos = max(emm_draws$.epred) + 5
-  )
+  ) %>% 
+  filter(!is.na(sx))
 
 comp_plot <- emm_draws %>%
   ggplot(aes(x = .epred, y = session, fill = sx)) +
@@ -350,13 +351,18 @@ comp_plot <- emm_draws %>%
   
   geom_text(
     data = label_df,
-    aes(x = x_pos, y = session, label = paste0("n=", n)),
+    aes(
+      x = x_pos,
+      y = session,
+      label = paste0("n=", n),
+      color = sx
+    ),
     inherit.aes = FALSE,
     hjust = 0,
     size = 3,
-    color = "black"
+    position = position_dodge(width = 0.6)
   ) +
-  
+
   facet_grid(status ~ ., labeller = label_both) +
   
   labs(
@@ -371,7 +377,8 @@ comp_plot <- emm_draws %>%
     plot.margin = margin(5.5, 40, 5.5, 5.5)
   ) +
   
-  expand_limits(x = max(label_df$x_pos) + 5)
+  expand_limits(x = max(label_df$x_pos) + 5) +
+  guides(color = "none")
 
 # comp_plot
 
@@ -421,9 +428,9 @@ diff_plot <- diff_draws %>%
 combined_plot <- comp_plot + diff_plot +
   plot_layout(ncol = 2, widths = c(1, 1))
 
-# combined_plot
+combined_plot
 
-# ggsave("Fig_Q2_24_bayesian.jpg", combined_plot, dpi = 300)
+ggsave("Fig_Q2_24_bayesian.jpg", combined_plot, dpi = 300)
 
 
 # Failed breeders presence --------------------------------------------------------
