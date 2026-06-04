@@ -428,9 +428,9 @@ diff_plot <- diff_draws %>%
 combined_plot <- comp_plot + diff_plot +
   plot_layout(ncol = 2, widths = c(1, 1))
 
-combined_plot
+# combined_plot
 
-ggsave("Fig_Q2_24_bayesian.jpg", combined_plot, dpi = 300)
+# ggsave("Fig_Q2_24_bayesian.jpg", combined_plot, dpi = 300)
 
 
 # Failed breeders presence --------------------------------------------------------
